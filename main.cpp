@@ -78,34 +78,37 @@ bool parse_message(char* message){
 }
 
 void scytale(char endeflag, char* message, int diameter) {
-	int length = ((strlen(message)-1)*diameter)+1; //the length is predictable
-	char scymessage[length];
+	int length;
 	int c, i = 0, j = 0, k = 0;
 	srand(time(NULL));
 	//printf("%d\n", length); checks that the legnth is correct
 	if(endeflag == 'e'){
+		length = ((strlen(message)-1)*diameter)+1; //the length is predictable
+		char enmessage[length];
 		while(i < (strlen(message)-1)) {
-			scymessage[j] = message[i];
+			enmessage[j] = message[i];
 			while(k < diameter) {
-				c = rand () % 57 + 65; c = c + 0; //printf("%c", c);
-				scymessage[j] =(char)c;
-				printf("%d %d %d %d %c\n", i, j, i+j, k, c);
+				//printf("%d %d %d %d %c\n", i, j, k, c, c);
 				j++; k++;
+				c = (rand () % 57 + 65);
+				if(j < (length -1)) { enmessage[j] =(char)c;}
 			}
 			i++;
+			if(j == (length -1)) { enmessage[j] = message[i];}
+
 			k = 0;
 		}
+		printf("\n%s\n", enmessage);
 	}
 	else if(endeflag == 'd') {
-		while(i < (strlen(message)-1)) {
-			scymessage[j] = message[i];
-			while(k < diameter) {
-				//printf("%d %d %d %d %c\n", i, j, k);
-				j++; k++;
-			}
+		length = ((strlen(message)-1)/diameter)+1;
+		char demessage[length];
+		while(i < length) {
+			demessage[i] = message[j];
 			i++;
-			k = 0;
+			j+=diameter;
 		}
+		demessage[i] = '\n';
+		printf("%s", demessage);
 	}
-	printf("\n%s\n", scymessage);
 }
