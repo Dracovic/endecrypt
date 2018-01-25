@@ -123,9 +123,9 @@ void atbash(char endeflag, char* message) {
 	char atmessage[strlen(message)];
 
 	for(i = 0; i < strlen(message); i++) {
-		if(isalpha(message[i]) == 0) // its not a letter, stays the same 
+		if(!isalpha(message[i])) // its not a letter, stays the same 
 			atmessage[i] = message[i];
-		else if(islower(message[i] == 0)) //its an upercase letter
+		else if(!islower(message[i])) //its an upercase letter
 			atmessage[i] = (90-(message[i]-65))+0;
 		else //its a lowercase letter
 			atmessage[i] = (122-(message[i]-97))+0;
