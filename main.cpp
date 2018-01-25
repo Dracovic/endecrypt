@@ -6,8 +6,9 @@
 
 using namespace std;
 
-bool parse_message(char* message);
-void scytale(char endeflag, char* message, int diameter = 2);
+bool parse_message(char* message); //just checks if it is "printable" so alphanumeric or punctuation including spaces and newlines
+void scytale(char endeflag, char* message, int diameter = 2); //first algorithm, an angled pole of certain number of faces or "diameter"
+void atbash(char endeflag, char* message); //from the first, last, second, and second to last letter of the hebrew alphabet, subs first to last letters and so on
 
 int main(int argc, char* argv[]) {
 	char endeflag = 'e';
@@ -52,13 +53,17 @@ int main(int argc, char* argv[]) {
 	message = argv[optind];
 	//printf("%c\n%s\n%s\n%s\n%s\n", endeflag, fileName, algo, parameter, message);
 	if(parse_message(message))
-		if(strcmp(algo, "scytale") == 0)
+		if(strcmp(algo, "scytale") == 0) {
 			if(parameter != NULL) {
 				scytale(endeflag, message, atoi(parameter));
 			}
 			else {
 				scytale(endeflag, message);
 			}
+		}
+		else if (strcmp(algo, "atbash") == 0) {
+			atbash(endeflag, message);
+		}
 	return 0;
 }
 
@@ -111,4 +116,20 @@ void scytale(char endeflag, char* message, int diameter) {
 		demessage[i] = '\n';
 		printf("%s", demessage);
 	}
+}
+
+void atbash(char endeflag, char* message) {
+	int i;
+	char atmessage[strlen(message)];
+
+	for(i = 0; i < strlen(message); i++) {
+		if(isalpha(message[i]) == 0) // its not a letter, stays the same 
+			atmessage[i] = message[i];
+		else if(islower(message[i] == 0)) //its an upercase letter
+			atmessage[i] = (90-(message[i]-65))+0;
+		else //its a lowercase letter
+			atmessage[i] = (122-(message[i]-97))+0;
+	}
+		atmessage[i] = '\n';
+		printf("%s", atmessage);
 }
