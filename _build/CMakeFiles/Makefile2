@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/klimi/Data/backup/Documents/repos/endecrypt/_build
 CMakeFiles/endecrypt.dir/all:
 	$(MAKE) -f CMakeFiles/endecrypt.dir/build.make CMakeFiles/endecrypt.dir/depend
 	$(MAKE) -f CMakeFiles/endecrypt.dir/build.make CMakeFiles/endecrypt.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/klimi/Data/backup/Documents/repos/endecrypt/_build/CMakeFiles --progress-num= "Built target endecrypt"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/klimi/Data/backup/Documents/repos/endecrypt/_build/CMakeFiles --progress-num=1,2 "Built target endecrypt"
 .PHONY : CMakeFiles/endecrypt.dir/all
 
 # Include target in all.
@@ -76,7 +76,7 @@ all: CMakeFiles/endecrypt.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/endecrypt.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/klimi/Data/backup/Documents/repos/endecrypt/_build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/klimi/Data/backup/Documents/repos/endecrypt/_build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/endecrypt.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/klimi/Data/backup/Documents/repos/endecrypt/_build/CMakeFiles 0
 .PHONY : CMakeFiles/endecrypt.dir/rule
