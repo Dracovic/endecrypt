@@ -10,6 +10,8 @@ bool parse_message(char* message); //just checks if it is "printable" so alphanu
 void scytale(char endeflag, char* message, int diameter = 2); //first algorithm, an angled pole of certain number of faces or "diameter"
 void atbash(char endeflag, char* message); //from the first, last, second, and second to last letter of the hebrew alphabet, subs first to last letters and so on
 
+void polybius(char endeflag, char* message, const char* square = "3x9");
+
 int main(int argc, char* argv[]) {
 	char endeflag = 'e';
 	char *fileName = NULL;
@@ -63,6 +65,13 @@ int main(int argc, char* argv[]) {
 		}
 		else if (strcmp(algo, "atbash") == 0) {
 			atbash(endeflag, message);
+		}
+		else if (strcmp(algo, "polybius") == 0) {
+			if(parameter != NULL) {
+				polybius(endeflag, message, parameter);
+			} else {
+				polybius(endeflag, message);
+			}
 		}
 	return 0;
 }
@@ -132,4 +141,39 @@ void atbash(char endeflag, char* message) {
 	}
 		atmessage[i] = '\n';
 		printf("%s", atmessage);
+}
+
+void polybius(char endeflag, char* message, const char* square) {
+	int i, j = 0, itemp;
+	int m = square[0]-48;
+	int n = square[2]-48;
+	if(endeflag == 'e') {
+		int length = (strlen(message)*4)+1;
+		char enmessage[length];
+		for(i=0;i < strlen(message); i++) {
+			//printf("Here --> %d %d\n", i, j);
+			if(!isalpha(message[i])) { //it's punctuation
+				enmessage[j] = '0';
+				enmessage[j+1] = ',';
+				enmessage[j+2] = '0';
+				enmessage[j+3] = ';';
+			} else if(!islower(message[i])) // it's upercase letter
+				itemp = message[i] - 64;
+			else // it's lowercase letter
+				itemp = message[i] - 96;
+			if(itemp%n == 0) {
+				enmessage[j] = (itemp/n)+48;
+				enmessage[j+2] = n+48;
+			} else {
+				enmessage[j] = (itemp/n)+49;
+				enmessage[j+2] = (itemp%n)+48;
+			}
+				enmessage[j+1] = ',';
+				enmessage[j+3] = ';';
+			j+=4;
+		}
+		enmessage[j] = '\0';
+		//printf("Here --> %d %d\n", i, j);
+		printf("%s\n", enmessage);
+	}
 }
