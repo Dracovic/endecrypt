@@ -179,7 +179,9 @@ void polybius(char endeflag, char* message, const char* square) {
 		int length = (strlen(message)-1)/4;
 		char demessage[length];
 		for(i=0;i < strlen(message); i+=4) {
-
+			demessage[j] = ((((message[i]-48)-1)*n)+(message[i+2]-48))+96;
+			j++;
 		}
+		printf("%s\n", demessage);
 	}
 }
