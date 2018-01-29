@@ -176,12 +176,13 @@ void polybius(char endeflag, char* message, const char* square) {
 		//printf("Here --> %d %d\n", i, j);
 		printf("%s\n", enmessage);
 	} else { //flag for decryption
-		int length = (strlen(message)-1)/4;
+		int length = ((strlen(message)-1)/4)+1;
 		char demessage[length];
 		for(i=0;i < strlen(message); i+=4) {
 			demessage[j] = ((((message[i]-48)-1)*n)+(message[i+2]-48))+96;
 			j++;
 		}
+		demessage[j] = '\0';
 		printf("%s\n", demessage);
 	}
 }
