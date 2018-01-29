@@ -147,7 +147,7 @@ void polybius(char endeflag, char* message, const char* square) {
 	int i, j = 0, itemp;
 	int m = square[0]-48;
 	int n = square[2]-48;
-	if(endeflag == 'e') {
+	if(endeflag == 'e') { //flag for encryption
 		int length = (strlen(message)*4)+1;
 		char enmessage[length];
 		for(i=0;i < strlen(message); i++) {
@@ -175,5 +175,11 @@ void polybius(char endeflag, char* message, const char* square) {
 		enmessage[j] = '\0';
 		//printf("Here --> %d %d\n", i, j);
 		printf("%s\n", enmessage);
+	} else { //flag for decryption
+		int length = (strlen(message)-1)/4;
+		char demessage[length];
+		for(i=0;i < strlen(message); i+=4) {
+
+		}
 	}
 }
