@@ -9,6 +9,7 @@ using namespace std;
 bool parse_message(char* message); //just checks if it is "printable" so alphanumeric or punctuation including spaces and newlines
 void scytale(char endeflag, char* message, int diameter = 2); //first algorithm, an angled pole of certain number of faces or "diameter"
 void atbash(char endeflag, char* message); //from the first, last, second, and second to last letter of the hebrew alphabet, subs first to last letters and so on
+void rot13(char* message);
 
 void polybius(char endeflag, char* message, const char* square = "3x9");
 
@@ -72,6 +73,9 @@ int main(int argc, char* argv[]) {
 			} else {
 				polybius(endeflag, message);
 			}
+		}
+		else if (strcmp(algo, "rot13") == 0) {
+			rot13(message);
 		}
 	return 0;
 }
@@ -185,4 +189,27 @@ void polybius(char endeflag, char* message, const char* square) {
 		demessage[j] = '\0';
 		printf("%s\n", demessage);
 	}
+}
+
+void rot13(char* message) {
+	int i = 0;
+	char endemessage[strlen(message)+1];
+	for(; i < strlen(message); i++) {
+		if(islower(message[i]))
+			if(message[i] < 110)
+				endemessage[i] = message[i]+13;
+			else {
+				endemessage[i] = message[i]-13;
+			}
+		else if(isupper(message[i]))
+			if(message[i] < 78)
+				endemessage[i] = message[i]+13;
+			else
+				endemessage[i] = message[i]-13;
+				
+		else
+			endemessage[i] = message[i];
+	}
+	endemessage[i] = '\0';
+	printf("%s\n", endemessage);
 }
