@@ -9,9 +9,9 @@ using namespace std;
 bool parse_message(char* message); //just checks if it is "printable" so alphanumeric or punctuation including spaces and newlines
 void scytale(char endeflag, char* message, int diameter = 2); //first algorithm, an angled pole of certain number of faces or "diameter"
 void atbash(char endeflag, char* message); //from the first, last, second, and second to last letter of the hebrew alphabet, subs first to last letters and so on
-void rot13(char* message);
-
-void polybius(char endeflag, char* message, const char* square = "3x9");
+void polybius(char endeflag, char* message, const char* square = "3x9");//choose dimensions of a rectangle, use it to map letters to position numbers and return the positions, inverse to decrypt
+void rot13(char* message);//ceasar cipher but only for 13
+int affine(char endeflag, char* message, const char* parameter = "5,8"); 
 
 int main(int argc, char* argv[]) {
 	char endeflag = 'e';
@@ -56,27 +56,29 @@ int main(int argc, char* argv[]) {
 	message = argv[optind];
 	//printf("%c\n%s\n%s\n%s\n%s\n", endeflag, fileName, algo, parameter, message);
 	if(parse_message(message))
-		if(strcmp(algo, "scytale") == 0) {
-			if(parameter != NULL) {
+		if(strcmp(algo, "scytale") == 0)
+			if(parameter != NULL)
 				scytale(endeflag, message, atoi(parameter));
-			}
-			else {
+			else
 				scytale(endeflag, message);
-			}
-		}
-		else if (strcmp(algo, "atbash") == 0) {
+		else if (strcmp(algo, "atbash") == 0)
 			atbash(endeflag, message);
-		}
-		else if (strcmp(algo, "polybius") == 0) {
-			if(parameter != NULL) {
+		else if (strcmp(algo, "polybius") == 0)
+			if(parameter != NULL)
 				polybius(endeflag, message, parameter);
-			} else {
+			else
 				polybius(endeflag, message);
-			}
-		}
-		else if (strcmp(algo, "rot13") == 0) {
+		else if (strcmp(algo, "rot13") == 0)
 			rot13(message);
-		}
+		else if (strcmp(algo, "affine") == 0)
+			if(parameter != NULL)
+				affine(endeflag, message, parameter);
+			else
+				affine(endeflag, message);
+		else
+			printf("Don't support that particular Algorithm");
+	else
+		printf("Message not parsed");
 	return 0;
 }
 
@@ -212,4 +214,31 @@ void rot13(char* message) {
 	}
 	endemessage[i] = '\0';
 	printf("%s\n", endemessage);
+}
+
+int affine(char endeflag, char* message, const char* parameter) {
+	int i = 0;
+	int a = parameter[0]-48;
+	int b = parameter[2]-48;
+	if(a == 2 | a==4 | a==6 | a==8 | a==10 | a==12 | a==13 | a==14 | a==16 | a==18 | a==20 | a==22 | a==2) {
+		printf("From: \"%s\" %c is not valid\n", parameter, parameter[0]);
+		return 0;
+	}
+	if(endeflag == 'e') {
+		char enmessage[strlen(message)+1];
+		for(; i < strlen(message); i++) {
+			if(islower(message[i]))
+				enmessage[i] = (((a*(message[i]-97))+b)%26)+97;
+			else if(isupper(message[i]))
+				enmessage[i] = (((a*(message[i]-65))+b)%26)+65;
+				else
+				enmessage[i] = message[i];
+		}
+		enmessage[i] = '\0';
+		printf("%s\n", enmessage);
+	}
+	else {
+		char demessage[strlen(message)+1];
+		demessage[i] = '\0';
+	}
 }
