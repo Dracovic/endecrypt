@@ -1,0 +1,3 @@
+/home/vick/endecrypt/_build/CMakeFiles/edit_cache.dir
+/home/vick/endecrypt/_build/CMakeFiles/rebuild_cache.dir
+/home/vick/endecrypt/_build/CMakeFiles/endecrypt.dir
