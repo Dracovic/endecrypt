@@ -19,9 +19,22 @@ class Decoder:
         if hasattr(self, kwargs['algo']):
             self.algo = getattr(self, kwargs['algo'])
             if callable(self.algo):
-                self.dec_msg = self.algo(kwargs['radius'])
+                if kwargs["algo"] == "scytale":
+                    self.dec_msg = self.algo(kwargs["radius"])
+                else:
+                    self.dec_msg = self.algo()
 
     def scytale(self, r: int = 5) -> str:
+        """ Scytale is a simple transposition cipher used in ancient Greece. I imagine it as a regular prism
+            of a certain number of faces. The number of faces is the key to the cipher. The message is written
+            on the prism and then read off in a spiral fashion.
+            
+            Attributes:
+                r: int - the number of faces on the prism.
+                
+            Returns:
+                result: str - the encoded message.
+        """
         r += 1
         enc_msg_len = len(self.enc_msg) - 1
         result = ""
@@ -35,6 +48,6 @@ class Decoder:
                 index = r*i+t
             result = result + self.enc_msg[index]
             i += 1
-            index = r*i + t
+            index = r*i+t
         return result
 
