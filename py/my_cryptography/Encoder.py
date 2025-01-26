@@ -15,16 +15,25 @@ class Encoder:
                 print(scy_enc.enc_msg)
                 >> 05af16bg27ch38di49ej
         """
-        self.org_msg = kwargs["message"]
-        if hasattr(self, kwargs["algo"]):
-            self.algo = getattr(self, kwargs["algo"])
-            if callable(self.algo):
-                if kwargs["algo"] == "scytale":
-                    self.enc_msg = self.algo(kwargs["radius"])
-                else:
-                    self.enc_msg = self.algo()
+        if kwargs:
+            self.org_msg = kwargs["message"]
+            if hasattr(self, kwargs["algo"]):
+                self.algo = getattr(self, kwargs["algo"])
+                if callable(self.algo):
+                    if kwargs["algo"] == "scytale":
+                        self.enc_msg = self.algo(kwargs["radius"])
+                    else:
+                        self.enc_msg = self.algo()
+        else: #No arguments passed programatically
+            self.org_msg = "abcdefghijklmnopqrst"
+            self.algo = getattr(self, "scytale")
+            self.enc_msg = self.algo()
 
-    def scytale(self, r: int = 5) -> str:
+        print(type(self.enc_msg))
+            
+    
+
+    def scytale(self, r: int = 4) -> str:
         """ Scytale is a simple transposition cipher used in ancient Greece. I imagine it as a regular prism
             of a certain number of faces. The number of faces is the key to the cipher. The message is written
             on the prism and then read off in a spiral fashion.
@@ -35,7 +44,6 @@ class Encoder:
             Returns:
                 result: str - the encoded message.
         """
-        #r += 1      # The number of faces on the prism + 1 to have the correct next character in the string        msg_len = len(self.org_msg) - 1
         msg_len = len(self.org_msg) - 1
         result = [' ' for _ in range(msg_len+1)] # Initialize the result string (empty)
         i = 0       # Counter for the loop
