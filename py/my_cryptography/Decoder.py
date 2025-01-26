@@ -35,19 +35,20 @@ class Decoder:
             Returns:
                 result: str - the encoded message.
         """
-        r += 1
         enc_msg_len = len(self.enc_msg) - 1
-        result = ""
+        result = [" " for _ in range(enc_msg_len+1)]
         i = 0
+        j = 0
         index = 0
         t = 0
-        while(len(result) <= enc_msg_len):
+        while(j <= enc_msg_len):
             if index > enc_msg_len:
-                t = index - enc_msg_len
+                t += 1
                 i = 0
                 index = r*i+t
-            result = result + self.enc_msg[index]
+            result[j] = self.enc_msg[index]
             i += 1
             index = r*i+t
-        return result
+            j += 1
+        return ''.join(result)
 

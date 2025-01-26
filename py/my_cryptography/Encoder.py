@@ -35,19 +35,21 @@ class Encoder:
             Returns:
                 result: str - the encoded message.
         """
-        r += 1      # The number of faces on the prism + 1 to have the correct next character in the string        msg_len = len(self.org_msg) - 1
+        #r += 1      # The number of faces on the prism + 1 to have the correct next character in the string        msg_len = len(self.org_msg) - 1
         msg_len = len(self.org_msg) - 1
-        result = '' # Initialize the result string (empty)
+        result = [' ' for _ in range(msg_len+1)] # Initialize the result string (empty)
         i = 0       # Counter for the loop
+        j = 0
         index = 0   # The actual variable used to index the orginal message and extract the character in turn
         t = 0       # This variable is used to control the overflow of the index when it wraps back around
-        while(len(result) <= msg_len):    # Loop until the result string is the same length as the original message
+        while(j <= msg_len):    # Loop until the result string is the same length as the original message
             if index > msg_len:           # If the index is greater than the length of the original message it would overflow, so this resets it
-                t = index - msg_len       # This calculates where it should start on the next pass
+                t += 1
                 i = 0                     # Reset the counter
                 index = r*i+t             # Restart the extraction from the new beginning
-            result = result + self.org_msg[index] # Extracts the character from the original message and adds it to the result string
+            result[index] = self.org_msg[j] # Extracts the character from the original message and adds it to the result string
             i += 1                                # Increment the counter
+            j += 1                                # Increment the counter
             index = r*i+t                         # Calculate the next index to extract the character from the original message
-        return result
+        return ''.join(result)
 
