@@ -1,3 +1,5 @@
+import string
+
 class Encoder:
     """An Encoder is an Object that is created with a specified algorithm as a parameter
        as well as an optional message to encode on creation."""
@@ -29,7 +31,6 @@ class Encoder:
             self.algo = getattr(self, "scytale")
             self.enc_msg = self.algo()
 
-        print(type(self.enc_msg))
             
     
 
@@ -61,3 +62,17 @@ class Encoder:
             index = r*i+t                         # Calculate the next index to extract the character from the original message
         return ''.join(result)
 
+    def atbash(self) -> str:
+        lower = [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))]
+        upper = [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))]
+        nums = [*zip(string.digits, reversed(string.digits))]
+
+        alphabet = dict(lower + upper + nums)
+
+        result = ''.join([alphabet[self.org_msg[self.org_msg.index(c)]] for c in self.org_msg])
+        return result
+        
+
+        
+en = Encoder()
+print(en.atbash())

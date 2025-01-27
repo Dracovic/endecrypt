@@ -1,3 +1,5 @@
+import string
+
 class Decoder:
     """A Decoder is an Object that is created with a specified algorithm as a parameter
        as well as an optional message to decode on creation."""
@@ -57,3 +59,18 @@ class Decoder:
             j += 1
         return ''.join(result)
 
+    def atbash(self) -> str:
+        #lower = [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))]  # all lowercase letters with matching opposite
+        #upper = [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))]   # all uppercase letters with matching opposite
+        #nums = [*zip(string.digits, reversed(string.digits	))]                    # all digits with matching opposite
+
+        alphabet = dict(
+            [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))] +
+            [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))] +
+            [*zip(string.digits, reversed(string.digits	))]
+            )
+
+        result = ''.join([alphabet[self.enc_msg[self.enc_msg.index(c)]] for c in self.enc_msg])
+        return result
+de = Decoder(message="zyxwvutsrqponmlkjihg", algo="atbash")
+print(de.atbash())

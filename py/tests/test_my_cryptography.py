@@ -13,24 +13,48 @@ class test_Encoder(unittest.TestCase):
         #self.assertIsInstance(self.test1, mc.Encoder) #Sanity Check
         
         ################# No params Test #################
-        self.assertEquals(self.test1.algo, getattr(self.test1, "scytale"))
-        self.assertEquals(self.test1.org_msg, "abcdefghijklmnopqrst")
-        self.assertEquals(self.test1.enc_msg, "afkpbglqchmrdinsejot")
+        self.assertEqual(self.test1.algo, getattr(self.test1, "scytale"))
+        self.assertEqual(self.test1.org_msg, "abcdefghijklmnopqrst")
+        self.assertEqual(self.test1.enc_msg, "afkpbglqchmrdinsejot")
         ################# r = 1 edge case Test #################
         self.test1.enc_msg = self.test1.algo(r = 1)
-        self.assertEquals(self.test1.enc_msg, "abcdefghijklmnopqrst")
+        self.assertEqual(self.test1.enc_msg, "abcdefghijklmnopqrst")
         ################# r = 2 Test #################
         self.test1.enc_msg = self.test1.algo(r = 2)
-        self.assertEquals(self.test1.enc_msg, "akblcmdneofpgqhrisjt")
+        self.assertEqual(self.test1.enc_msg, "akblcmdneofpgqhrisjt")
         ################# r = 3 Test #################
         self.test1.enc_msg = self.test1.algo(r = 3)
-        self.assertEquals(self.test1.enc_msg, "ahobipcjqdkrelsfmtgn")
+        self.assertEqual(self.test1.enc_msg, "ahobipcjqdkrelsfmtgn")
 
         ################# 1 - 100 Test #################
         for i in range(1, 20):
             self.test1.enc_msg = self.test1.algo(r = i)
             assert isinstance(self.test1.enc_msg, str)
 
+    def test_atbash_encoder(self):
+        self.test1.algo = getattr(self.test1, "atbash")
+        self.assertEqual(self.test1.algo, getattr(self.test1, "atbash"))
+        ################# lowercase Test #################
+        self.assertEqual(self.test1.org_msg, "abcdefghijklmnopqrst")
+        self.test1.enc_msg = self.test1.algo()
+        self.assertEqual(self.test1.enc_msg, "zyxwvutsrqponmlkjihg")
+        ################# uppercase Test #################
+        self.test1.org_msg = "ABCDEFGHIJKLMNOPQRST"
+        self.test1.enc_msg = self.test1.algo()
+        self.assertEqual(self.test1.enc_msg, "ZYXWVUTSRQPONMLKJIHG")
+        ################# full alphabet Test #################
+        self.test1.org_msg = "AbCdEfGhIjKlMnOpQrSt"
+        self.test1.enc_msg = self.test1.algo()
+        self.assertEqual(self.test1.enc_msg, "ZyXwVuTsRqPoNmLkJiHg")
+        ################# numeric Test #################
+        self.test1.org_msg = "0123456789"
+        self.test1.enc_msg = self.test1.algo()
+        self.assertEqual(self.test1.enc_msg, "9876543210")
+        ################# alphabet and numerics Test #################
+        self.test1.org_msg = "Ab0Cd1Ef2Gh3Ij4Kl5Mn6Op7Qr8St9"
+        self.test1.enc_msg = self.test1.algo()
+        self.assertEqual(self.test1.enc_msg, "Zy9Xw8Vu7Ts6Rq5Po4Nm3Lk2Ji1Hg0")
+ 
     def tearDown(self):
         print('Tearing down Encoder test...')
         del self.test1
@@ -43,6 +67,7 @@ class test_Decoder(unittest.TestCase):
         self.test1 = mc.Decoder()
         
     def test_scytale_decoder(self):
+
         #self.assertIsInstance(self.test1, mc.Decoder) #Sanity Check
         
         ################# No params Test #################
@@ -72,6 +97,36 @@ class test_Decoder(unittest.TestCase):
             self.test1.dec_msg = self.test1.algo(r = i)          # decode the encrypted message using the same 'key' (radius)
             assert self.test1.dec_msg == self.encoder.org_msg    # assert the decoded message is the same as the original message from the encoder
 
+    def test_atbash_decoder(self):
+        self.encoder.algo = getattr(self.encoder, "atbash")
+        self.test1.algo = getattr(self.test1, "atbash")
+        self.assertEqual(self.test1.algo, getattr(self.test1, "atbash"))
+        ################# lowercase Test #################
+        self.encoder.org_msg = "abcdefghijklmnopqrst"
+        self.test1.enc_msg = self.encoder.algo()
+        self.test1.dec_msg = self.test1.algo()
+        self.assertEqual(self.test1.dec_msg, "abcdefghijklmnopqrst")
+        ################# uppercase Test #################
+        self.encoder.org_msg = "ABCDEFGHIJKLMNOPQRST"
+        self.test1.enc_msg = self.encoder.algo()
+        self.test1.dec_msg = self.test1.algo()
+        self.assertEqual(self.test1.dec_msg, "ABCDEFGHIJKLMNOPQRST")
+        ################# full alphabet Test #################
+        self.encoder.org_msg = "AbCdEfGhIjKlMnOpQrSt"
+        self.test1.enc_msg = self.encoder.algo()
+        self.test1.dec_msg = self.test1.algo()
+        self.assertEqual(self.test1.dec_msg, "AbCdEfGhIjKlMnOpQrSt")
+        ################# numeric Test #################
+        self.encoder.org_msg = "0123456789"
+        self.test1.enc_msg = self.encoder.algo()
+        self.test1.dec_msg = self.test1.algo()
+        self.assertEqual(self.test1.dec_msg, "0123456789")
+        ################# alphabet and numerics Test #################
+        self.encoder.org_msg = "Ab0Cd1Ef2Gh3Ij4Kl5Mn6Op7Qr8St9"
+        self.test1.enc_msg = self.encoder.algo()
+        self.test1.dec_msg = self.test1.algo()
+        self.assertEqual(self.test1.dec_msg, "Ab0Cd1Ef2Gh3Ij4Kl5Mn6Op7Qr8St9")
+        
     def tearDown(self):
         print('Tearing down Decoder test...')
         del self.test1
