@@ -31,9 +31,6 @@ class Encoder:
             self.algo = getattr(self, "scytale")
             self.enc_msg = self.algo()
 
-            
-    
-
     def scytale(self, r: int = 4) -> str:
         """ Scytale is a simple transposition cipher used in ancient Greece. I imagine it as a regular prism
             of a certain number of faces. The number of faces is the key to the cipher. The message is written
@@ -69,10 +66,15 @@ class Encoder:
 
         alphabet = dict(lower + upper + nums)
 
-        result = ''.join([alphabet[self.org_msg[self.org_msg.index(c)]] for c in self.org_msg])
+        result = ''.join([alphabet[self.org_msg[self.org_msg.index(c)]] in self.org_msg for c in self.org_msg if c else " "])
         return result
         
-
-        
+    def polybius_square(self) -> str:
+        n = 5 # The size of the polybius square
+        #m = [[]]
+        #for a in string.ascii_letters:
+            #pass
+        return result
+    
 en = Encoder()
 print(en.atbash())

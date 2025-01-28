@@ -72,5 +72,8 @@ class Decoder:
 
         result = ''.join([alphabet[self.enc_msg[self.enc_msg.index(c)]] for c in self.enc_msg])
         return result
+
+
+
 de = Decoder(message="zyxwvutsrqponmlkjihg", algo="atbash")
 print(de.atbash())
