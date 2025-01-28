@@ -59,13 +59,13 @@ class Decoder:
             j += 1
         return ''.join(result)
 
-    def atbash(self) -> str:
+    def atbash(self) -> str: # Only works with alphanumeric strings
         #lower = [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))]  # all lowercase letters with matching opposite
-        #upper = [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))]   # all uppercase letters with matching opposite
+        #upper = [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))]  # all uppercase letters with matching opposite
         #nums = [*zip(string.digits, reversed(string.digits	))]                    # all digits with matching opposite
 
         alphabet = dict(
-            [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))] +
+            [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))] + 
             [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))] +
             [*zip(string.digits, reversed(string.digits	))]
             )
@@ -73,7 +73,28 @@ class Decoder:
         result = ''.join([alphabet[self.enc_msg[self.enc_msg.index(c)]] for c in self.enc_msg])
         return result
 
+    def polybius_square(self) -> str: # Only works with lower case alphabet
+        alphabet = list(string.ascii_lowercase)
+        alphabet.remove('j')
+        transform = [str(i+1)+str(j+1) for i in range(5) for j in range(5)]
+        #for i in range(5):
+            #for j in range(5):
+                #transform.append(str(i+1)+str(j+1))
 
+        #print(alphabet)
+        #print(transform)
+        #print([*zip(alphabet, transform)])
 
-de = Decoder(message="zyxwvutsrqponmlkjihg", algo="atbash")
-print(de.atbash())
+        alphabet_dict = {t: k for k, t in [*zip(alphabet, transform)]}
+        #print(alphabet_dict)
+
+        result = ''
+        for i, j in zip(self.enc_msg[::2], self.enc_msg[1::2]):
+            result = result + alphabet_dict[i+j]
+
+        return result
+
+#de = Decoder(message="zyxwvutsrqponmlkjihg", algo="atbash")
+#print(de.atbash())
+de = Decoder(message="111213141521222324253132333435", algo="polybius_square")
+print(de.dec_msg)

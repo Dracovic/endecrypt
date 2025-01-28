@@ -1,4 +1,5 @@
 import string
+import numpy as np
 
 class Encoder:
     """An Encoder is an Object that is created with a specified algorithm as a parameter
@@ -59,22 +60,37 @@ class Encoder:
             index = r*i+t                         # Calculate the next index to extract the character from the original message
         return ''.join(result)
 
-    def atbash(self) -> str:
-        lower = [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))]
-        upper = [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))]
-        nums = [*zip(string.digits, reversed(string.digits))]
+    def atbash(self) -> str: # Only works with alphanumeric strings
+        lower = [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))] # pair list of the lower case alphabet with it's pair in reverse order
+        upper = [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))] # pair list of the upper case alphabet with it's pair in reverse order
+        nums = [*zip(string.digits, reversed(string.digits))] # pair list of the digits with it's pair in reverse order
 
-        alphabet = dict(lower + upper + nums)
+        alphabet = dict(lower + upper + nums) # hashmap of all letters and digits with corresponding opposites for quick lookup
 
-        result = ''.join([alphabet[self.org_msg[self.org_msg.index(c)]] in self.org_msg for c in self.org_msg if c else " "])
+        result = ''.join([alphabet[self.org_msg[self.org_msg.index(c)]] for c in self.org_msg])
         return result
         
-    def polybius_square(self) -> str:
+    def polybius_square(self) -> str: # Only returns lowercase alphabet letters
         n = 5 # The size of the polybius square
-        #m = [[]]
-        #for a in string.ascii_letters:
-            #pass
+        alphabet = list(string.ascii_lowercase)
+        alphabet.remove('j') 
+        square = np.array(alphabet).reshape(5, 5)
+
+        alphabet_dict = {}
+        for row in square:
+            for letter in row:
+                row, col = np.where(square == letter)
+                alphabet_dict[letter] = str(row[0]+1) + str(col[0]+1)
+                #print(f'{letter}: {row[0]+1} {col[0]+1}')
+        #print(alphabet_dict)
+        result = ''
+        for letter in self.org_msg:
+            if letter == 'j':
+                result = result + alphabet_dict['i']
+            else:
+                result = result + alphabet_dict[letter]
+            
         return result
     
 en = Encoder()
-print(en.atbash())
+print(en.polybius_square())
