@@ -94,7 +94,24 @@ class Decoder:
 
         return result
 
+    def caesar_cipher(self, key = 4) -> str: # Only works with lower case alphabet and spaces
+        alphabet = list(string.ascii_lowercase)
+
+        print(self.enc_msg)
+        print(alphabet)
+
+        result = ""
+        for char in self.enc_msg:
+            if char != " ":
+                index = alphabet.index(char) - key
+                result = result + alphabet[index]
+            else:
+                result = result + " "
+        return result
+
+
 #de = Decoder(message="zyxwvutsrqponmlkjihg", algo="atbash")
 #print(de.atbash())
-de = Decoder(message="111213141521222324253132333435", algo="polybius_square")
-print(de.dec_msg)
+#de = Decoder(message="111213141521222324253132333435", algo="polybius_square")
+#print(de.dec_msg)
+de = Decoder(message="efghijklmnopqrstuvwx", algo="caesar_cipher")

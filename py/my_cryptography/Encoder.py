@@ -179,37 +179,38 @@ class Encoder:
         # Output
         return ciphertext
     
-en = Encoder()
-print(en.caesar_cipher())
-print(en.cytool_caesar(text='abcdefghijklmnopqrst', key=4, alphabet='abcdefghijklmnopqrstuvwxyz', b_encrypt=True, b_keep_chars=False, b_block_of_five=False))
+#   performance testing, cProfile, time, and pstats
+    #en = Encoder()
+    #print(en.caesar_cipher())
+    #print(en.cytool_caesar(text='abcdefghijklmnopqrst', key=4, alphabet='abcdefghijklmnopqrstuvwxyz', b_encrypt=True, b_keep_chars=False, b_block_of_five=False))
 
-profiler = cProfile.Profile()
-start_time = time.perf_counter_ns()
-profiler.enable()
-en.caesar_cipher()
-profiler.disable()
-end_time = time.perf_counter_ns()
+    #profiler = cProfile.Profile()
+    #start_time = time.perf_counter_ns()
+    #profiler.enable()
+    #en.caesar_cipher()
+    #profiler.disable()
+    #end_time = time.perf_counter_ns()
 
-s = StringIO()
-stats = pstats.Stats(profiler, stream=s)
-stats.strip_dirs().sort_stats("cumulative").print_stats(10)
-print(s.getvalue())
+    #s = StringIO()
+    #stats = pstats.Stats(profiler, stream=s)
+    #stats.strip_dirs().sort_stats("cumulative").print_stats(10)
+    #print(s.getvalue())
 
-print(f'{"":<25}My Caesar execution time: {end_time - start_time}: nanoseconds')
-print("-"*50)
+    #print(f'{"":<25}My Caesar execution time: {end_time - start_time}: nanoseconds')
+    #print("-"*50)
 
-profiler = cProfile.Profile()
-start_time = time.perf_counter_ns()
-profiler.enable()
-en.cytool_caesar(text='abcdefghijklmnopqrst', key=4, alphabet='abcdefghijklmnopqrstuvwxyz', b_encrypt=True, b_keep_chars=False, b_block_of_five=False)
-profiler.disable()
-end_time = time.perf_counter_ns()
+    #profiler = cProfile.Profile()
+    #start_time = time.perf_counter_ns()
+    #profiler.enable()
+    #en.cytool_caesar(text='abcdefghijklmnopqrst', key=4, alphabet='abcdefghijklmnopqrstuvwxyz', b_encrypt=True, b_keep_chars=False, b_block_of_five=False)
+    #profiler.disable()
+    #end_time = time.perf_counter_ns()
 
-print(f'{"":<25}Cryptool Caesar execution time: {end_time - start_time}: nanoseconds')
+    #print(f'{"":<25}Cryptool Caesar execution time: {end_time - start_time}: nanoseconds')
 
-s = StringIO()
-stats = pstats.Stats(profiler, stream=s)
-stats.strip_dirs().sort_stats("cumulative").print_stats(10)
-print(s.getvalue())
+    #s = StringIO()
+    #stats = pstats.Stats(profiler, stream=s)
+    #stats.strip_dirs().sort_stats("cumulative").print_stats(10)
+    #print(s.getvalue())
 
 

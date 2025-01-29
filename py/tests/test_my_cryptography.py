@@ -1,5 +1,6 @@
 import unittest
 import pytest
+import time
 
 import my_cryptography as mc
 
@@ -66,7 +67,7 @@ class test_Encoder(unittest.TestCase):
         del self.test1
 
 @pytest.mark.benchmark(group="performance")
-def test_caesar_cipher(benchmark):
+def test_caesar_encode(benchmark):
     en = mc.Encoder()
     result = benchmark(en.caesar_cipher)
     assert result == 'efghijklmnopqrstuvwx'
@@ -157,3 +158,9 @@ class test_Decoder(unittest.TestCase):
         print('Tearing down Decoder test...')
         del self.test1
 
+@pytest.mark.benchmark(group="performance", timer=time.perf_counter_ns)
+def test_caesar_decode(benchmark):
+    en = mc.Encoder(message="abcdefghijklmnopqrst",algo="caesar_cipher")
+    de = mc.Decoder(message=en.enc_msg, algo="caesar_cipher")
+    result = benchmark(de.caesar_cipher)
+    assert result == en.org_msg
