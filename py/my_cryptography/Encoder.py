@@ -92,5 +92,14 @@ class Encoder:
             
         return result
     
+    def caesar_cipher(self, key = 4) -> str:                  # Only rotates to the right
+        rotation = list([i for i in range(key+1, 26)] + [i for i in range(1, key)]) # applies the rotation for the keys to map in the dict
+        lower = [*zip(string.ascii_lowercase, rotation)]                            # creates the paired list for the dict
+        upper = [*zip(string.ascii_uppercase, rotation)]                            # creates the paired list for the dict
+        digits = [*zip(string.digits, rotation)]                            # creates the paired list for the dict
+        print(digits)
+        rotated_alphabet_dict = {r_lower + r_upper + r_digits}
+        ...
+    
 en = Encoder()
-print(en.polybius_square())
+en.caesar_cipher()
