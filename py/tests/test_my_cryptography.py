@@ -55,6 +55,11 @@ class test_Encoder(unittest.TestCase):
         self.test1.enc_msg = self.test1.algo()
         self.assertEqual(self.test1.enc_msg, "Zy9Xw8Vu7Ts6Rq5Po4Nm3Lk2Ji1Hg0")
  
+    def test_polybius_square(self):
+        self.test1.algo = getattr(self.test1, "polybius_square")
+        self.test1.enc_msg = self.test1.algo()
+        self.assertEqual(self.test1.enc_msg, "1112131415212223242425313233343541424344") # 24 twice bc i and j map to the same
+    
     def tearDown(self):
         print('Tearing down Encoder test...')
         del self.test1
@@ -126,6 +131,14 @@ class test_Decoder(unittest.TestCase):
         self.test1.enc_msg = self.encoder.algo()
         self.test1.dec_msg = self.test1.algo()
         self.assertEqual(self.test1.dec_msg, "Ab0Cd1Ef2Gh3Ij4Kl5Mn6Op7Qr8St9")
+
+    def test_polybius_square(self):
+        self.encoder.org_msg = 'abcdefghiiklmnopqrst'                # must be square so only 25 letters, j is i now
+        self.encoder.algo = getattr(self.encoder, "polybius_square") # set encoder algo to polybius_square
+        self.test1.algo = getattr(self.test1, "polybius_square")     # set decoder algo to polybius_square
+        self.test1.enc_msg = self.encoder.algo()                     # set decoder encrypted msg to encoder's polybius_square encoding
+        self.test1.dec_msg = self.test1.algo()                       # decode encoder's encrypted msg
+        self.assertEqual(self.test1.dec_msg, self.encoder.org_msg)   # decoder's decrypted msg should match encoder's original mesg (24 twice bc i and j map to the same)
         
     def tearDown(self):
         print('Tearing down Decoder test...')
