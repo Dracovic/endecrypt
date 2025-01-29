@@ -1,5 +1,10 @@
 import string
 import numpy as np
+import cProfile
+import pstats
+from io import StringIO
+import time
+import timeit
 
 class Encoder:
     """An Encoder is an Object that is created with a specified algorithm as a parameter
@@ -92,14 +97,119 @@ class Encoder:
             
         return result
     
-    def caesar_cipher(self, key = 4) -> str:                  # Only rotates to the right
-        rotation = list([i for i in range(key+1, 26)] + [i for i in range(1, key)]) # applies the rotation for the keys to map in the dict
-        lower = [*zip(string.ascii_lowercase, rotation)]                            # creates the paired list for the dict
-        upper = [*zip(string.ascii_uppercase, rotation)]                            # creates the paired list for the dict
-        digits = [*zip(string.digits, rotation)]                            # creates the paired list for the dict
-        print(digits)
-        rotated_alphabet_dict = {r_lower + r_upper + r_digits}
-        ...
+    def caesar_cipher(self, key = 4) -> str:                  # Only rotates to the right | supports spaces
+        lower_dict = dict([*zip(string.ascii_lowercase, [f for f in range(1,26)])])   # iterate linearly 3 times, then a quick lookup for each char in org_msg
+        upper_dict = dict([*zip(string.ascii_uppercase, [f for f in range(1,26)])])   # should be inherited by both Encode and Decode in the future
+        digits_dict = dict([*zip(string.digits, [f for f in range(1,26)])])
+
+        caesar_lookup = []
+        for letter in self.org_msg:
+            if letter == ' ':
+                caesar_lookup.append(' ')
+            elif letter in string.ascii_lowercase:
+                caesar_lookup.append(str(lower_dict[letter]))
+            elif letter in string.ascii_uppercase:
+                caesar_lookup.append(str(upper_dict[letter]))
+            else:
+                letter in string.digits
+                caesar_lookup.append(str(digits_dict[letter]))
+
+        rotation = list([i for i in range(26-key+1, 27)] + [i for i in range(1, 27-key+1)]) # applies the rotation for the keys to map in the dict
+        rotated_lower = dict([*zip(rotation, string.ascii_lowercase)])       # creates the paired list for the dict
+        rotated_upper = dict([*zip(rotation, string.ascii_uppercase)])        # creates the paired list for the dict
+        rotated_digits = dict([*zip(list([i for i in range(10-key+1, 10)] + [i for i in range(10-key+1)]), string.digits)])                # creates the paired list for the dict
+        #print(rotated_lower)
+        #print(rotated_digits)
+        #print(caesar_lookup)
+
+
+        result = []
+        for num in caesar_lookup:
+            if num == ' ':
+                result.append(' ')
+            elif int(num) in rotated_lower.keys():
+                result.append(rotated_lower[int(num)])
+            elif int(num) in rotated_upper.keys():
+                result.append(rotated_upper[int(num)])
+            else:
+                result.append(rotated_digits[int(num)])
+
+        return ''.join(result) 
+
+    def cytool_caesar(self, text, key, alphabet, b_encrypt, b_keep_chars, b_block_of_five) -> str:
+        ciphertext = ""
+
+        # iterate through text
+        for old_character in text:
+            new_character = ""
+    
+            # if character is in alphabet append to ciphertext
+            if(old_character in alphabet):
+                index = alphabet.index(old_character)
+    
+                if(b_encrypt):  # if text is to be encrypted
+                    new_index = (index + key) % len(alphabet)
+    
+                else:  # if text is to be decrypted
+                    new_index = (index - key) % len(alphabet)
+    
+                new_character = alphabet[new_index]
+    
+            else:
+    
+                # if the symbol is not in alphabet then regard block_of_five and b_encrypt
+                if(not b_keep_chars):
+                    continue
+                else:
+                    if(b_block_of_five and b_encrypt):
+                        if(old_character != " "):
+                            new_character = old_character
+                        else:
+                            continue
+                    else:
+                        new_character = old_character
+    
+            ciphertext = ciphertext + new_character
+    
+            # if blocks_of_five is true, append a space after every 5 characters
+            if(b_block_of_five and b_encrypt):
+                if(len(ciphertext.replace(" ", "")) % 5 == 0):
+                    ciphertext = ciphertext + " "
+
+        # Output
+        return ciphertext
     
 en = Encoder()
+print(en.caesar_cipher())
+print(en.cytool_caesar(text='abcdefghijklmnopqrst', key=4, alphabet='abcdefghijklmnopqrstuvwxyz', b_encrypt=True, b_keep_chars=False, b_block_of_five=False))
+
+profiler = cProfile.Profile()
+start_time = time.perf_counter_ns()
+profiler.enable()
 en.caesar_cipher()
+profiler.disable()
+end_time = time.perf_counter_ns()
+
+s = StringIO()
+stats = pstats.Stats(profiler, stream=s)
+stats.strip_dirs().sort_stats("cumulative").print_stats(10)
+print(s.getvalue())
+
+print(f'{"":<25}My Caesar execution time: {end_time - start_time}: nanoseconds')
+print("-"*50)
+
+profiler = cProfile.Profile()
+start_time = time.perf_counter_ns()
+profiler.enable()
+en.cytool_caesar(text='abcdefghijklmnopqrst', key=4, alphabet='abcdefghijklmnopqrstuvwxyz', b_encrypt=True, b_keep_chars=False, b_block_of_five=False)
+profiler.disable()
+end_time = time.perf_counter_ns()
+
+print(f'{"":<25}Cryptool Caesar execution time: {end_time - start_time}: nanoseconds')
+
+s = StringIO()
+stats = pstats.Stats(profiler, stream=s)
+stats.strip_dirs().sort_stats("cumulative").print_stats(10)
+print(s.getvalue())
+
+

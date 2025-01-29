@@ -60,10 +60,23 @@ class test_Encoder(unittest.TestCase):
         self.test1.enc_msg = self.test1.algo()
         self.assertEqual(self.test1.enc_msg, "1112131415212223242425313233343541424344") # 24 twice bc i and j map to the same
     
+   
     def tearDown(self):
         print('Tearing down Encoder test...')
         del self.test1
 
+@pytest.mark.benchmark(group="performance")
+def test_caesar_cipher(benchmark):
+    en = mc.Encoder()
+    result = benchmark(en.caesar_cipher)
+    assert result == 'efghijklmnopqrstuvwx'
+
+@pytest.mark.benchmark(group="performance")
+def test_cytool_caesar(benchmark):
+    en = mc.Encoder()
+    result = benchmark(en.caesar_cipher)
+    assert result == 'efghijklmnopqrstuvwx'
+ 
 
 class test_Decoder(unittest.TestCase):
     def setUp(self):
