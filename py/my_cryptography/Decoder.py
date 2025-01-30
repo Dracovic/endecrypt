@@ -97,8 +97,8 @@ class Decoder:
     def caesar_cipher(self, key = 4) -> str: # Only works with lower case alphabet and spaces
         alphabet = list(string.ascii_lowercase)
 
-        print(self.enc_msg)
-        print(alphabet)
+        #print(self.enc_msg)
+        #print(alphabet)
 
         result = ""
         for char in self.enc_msg:
@@ -109,9 +109,14 @@ class Decoder:
                 result = result + " "
         return result
 
+    def rot13(self) -> str:
+        return self.caesar_cipher(key = 14)
+        ...
 
 #de = Decoder(message="zyxwvutsrqponmlkjihg", algo="atbash")
 #print(de.atbash())
 #de = Decoder(message="111213141521222324253132333435", algo="polybius_square")
 #print(de.dec_msg)
-de = Decoder(message="efghijklmnopqrstuvwx", algo="caesar_cipher")
+#de = Decoder(message="efghijklmnopqrstuvwx", algo="caesar_cipher")
+#de = Decoder(message="opqrstuvwxyzabcdefgh", algo="rot13")
+#print(de.dec_msg)
