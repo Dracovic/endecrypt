@@ -214,6 +214,9 @@ class Encoder:
 
     def rot13(self) -> str: # Only supports lowercase letters
         return self.caesar_cipher(key = 14)
+   
+    def affine() -> str:
+        ...
 
 en = Encoder(message="abcdefghijlkmnopqrst", algo="rot13")
 print(en.enc_msg)
