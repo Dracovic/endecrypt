@@ -203,9 +203,12 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
 
     def rot13(self) -> str: # Only supports lowercase letters
         return self.caesar_cipher(key = 14)
+<<<<<<< HEAD
    
     def affine(self) -> str:
         ...
+=======
+>>>>>>> parent of 981cbfc (beginn affine cipher, Encoder and Decoder class methods shall be only 1 word long)
 
 en = Encoder(message="abcdefghijlkmnopqrst", algo="rot13")
 print(en.enc_msg)
