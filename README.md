@@ -9,10 +9,10 @@ Options:
 -e --en --encrypt	The program with run the selected algorithm to encrypt the input
 -d --de --decrypt	The program with run the selected algorithm to decrypt the input
 -a --algorithm      The method of encryption or decryption desired to run
--m --message        The string or file to be (en/de)crypted
--i --input          The string or file to be (en/de)crypted
+-m --message        The string to be (en/de)crypted
+-i --input          The file to be (en/de)crypted
 -o --output         The file or path to the file where the output shall be saved.
-                    Defaults to terminal output
+                    Defaults to terminal output if omitted.
 
 Optional: (depending on the selected algorithm)
 -r --radius The 'key'or radius for the Scytale transposition cipher
