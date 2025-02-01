@@ -6,7 +6,7 @@ from io import StringIO
 import time
 from coder import Coder
 
-class Encoder:
+class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet definition
     """An Encoder is an Object that is created with a specified algorithm as a parameter
        as well as an optional message to encode on creation."""
 
@@ -23,19 +23,8 @@ class Encoder:
                 print(scy_enc.enc_msg)
                 >> 05af16bg27ch38di49ej
         """
-        if kwargs:
-            self.org_msg = kwargs["message"]
-            if hasattr(self, kwargs["algo"]):
-                self.algo = getattr(self, kwargs["algo"])
-                if callable(self.algo):
-                    if kwargs["algo"] == "scytale":
-                        self.enc_msg = self.algo(kwargs["radius"])
-                    else:
-                        self.enc_msg = self.algo()
-        else: #No arguments passed programatically
-            self.org_msg = "abcdefghijklmnopqrst"
-            self.algo = getattr(self, "scytale")
-            self.enc_msg = self.algo()
+        self.algo = getattr(self, self.algo)
+        self.enc_msg = self.algo()
 
     def scytale(self, r: int = 4) -> str:
         """ Scytale is a simple transposition cipher used in ancient Greece. I imagine it as a regular prism
