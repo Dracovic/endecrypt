@@ -4,7 +4,7 @@ import cProfile
 import pstats
 from io import StringIO
 import time
-import timeit
+from coder import Coder
 
 class Encoder:
     """An Encoder is an Object that is created with a specified algorithm as a parameter
@@ -215,7 +215,7 @@ class Encoder:
     def rot13(self) -> str: # Only supports lowercase letters
         return self.caesar_cipher(key = 14)
    
-    def affine() -> str:
+    def affine(self) -> str:
         ...
 
 en = Encoder(message="abcdefghijlkmnopqrst", algo="rot13")
