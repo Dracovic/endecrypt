@@ -2,6 +2,7 @@ import string
 
 class Coder:
 <<<<<<< HEAD
+<<<<<<< HEAD
     """ A Coder class to abstract manage and not repeat attributes both the Encoder and Decoder classes
         will have in common. Also will manage files and command-line inputs.
     """
@@ -23,6 +24,11 @@ class Coder:
         else: #No arguments passed programatically
             self.msg = "abcdefghijklmnopqrst"
             self.algo = "scytale"
+=======
+
+    def __init__(self):
+        self.std_alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(62))])
+>>>>>>> 852295f (Created Coder Parent Class to abstract the argument passing from cmdline into both obj instancing without repeating code. Also generating the alphabet to be used for either class)
 =======
 
     def __init__(self):
