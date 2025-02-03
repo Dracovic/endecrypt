@@ -18,11 +18,11 @@
             "args": ["-e"],
         },
         {
-            "name": "Python Debugger: main.py -e -a scytale",
+            "name": "Python Debugger: main.py -e -a scytale -r 5",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "args": ["-e", "-a", "scytale"],
+            "args": ["-e", "-a", "scytale", "-r", "5"],
         }
     ]
 }

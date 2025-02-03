@@ -34,12 +34,11 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
                 >> 05af16bg27ch38di49ej
         """
         if "algo" in kwargs: # user defined algorithm
-            if(self._validate_algo(kwargs["algo"])):
-                self.algo = getattr(self, kwargs["algo"])
+            super()._validate_algo(kwargs["algo"])
         else:
             self.algo = getattr(self, "rot13")
         super().__init__(**kwargs)
-        self.enc_msg = self.algo()
+        self.enc_msg = self.run_encryption(**kwargs)
 
     def info(self, alf: bool = False):
         """Prints the attributes of the Encoder object."""
@@ -51,6 +50,18 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
             print(f'Alphabet: {self.alphabet}')
         super().info()
 
+    def run_encryption(self, **kwargs) -> str:
+        """Runs the algorithm specified in the Encoder object.
+        """
+        if kwargs["algo"] == "scytale":
+            if 'radius' in kwargs:
+                return self.scytale(kwargs["radius"])
+            else:
+                raise ValueError("Scytale requires a radius to be specified")
+        elif 'key' in kwargs:
+            return self.algo(kwargs["key"])
+        else:
+            return self.algo()
 
     def scytale(self, r: int = 4) -> str:
         """ Scytale is a simple transposition cipher used in ancient Greece. I imagine it as a regular prism
@@ -82,7 +93,7 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
 
     def atbash(self) -> str: # Only works with alphanumeric strings
         atbash_phabet = {k: v for k, v in zip(self.alphabet.keys(), reversed(self.alphabet.keys()))}
-        #print(alphabet)
+        #print(atbash_phabet)
         result = ''.join([atbash_phabet[c] for c in self.org_msg])
         #print(result)
         return result

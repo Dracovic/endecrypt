@@ -85,7 +85,7 @@ class Coder:
         finally:
             return True
     
-    def _validate_algo(en_or_de: bool, algo: str) -> bool: # should only be called by child classes
+    def _validate_algo(algo: str) -> bool: # should only be called by child classes
         """This function checks the Coder class and makes sure that the algorithm is programmed into the Encoder or Decoder classes
     
             Arguments:
@@ -96,16 +96,14 @@ class Coder:
                 True: bool  - validation either passes and returns True or fails and raises an Error.
         """
         try:
-            if en_or_de:
-                if hasattr(self.algo):
-                    if not callable(algo):
-                        raise argparse.ArgumentError(f'{self.algo_arg} is not an existingly supported algorithm.')
-            else:
-                if hasattr(self, algo):
-                    if not callable(algo):
-                        raise argparse.ArgumentError(f'{self.algo} is not an existingly supported algorithm.')
-        finally:
-            return True
+            if hasattr(self.algo): # self always refers to the object instantiated, here the Child calling it
+                if not callable(self.algo):
+                    raise argparse.ArgumentError(f'{self.algo} is not an existing supported algorithm.')
+                    return False
+        except Exception as e:
+            print(f'Error: {e}')
+            return False
+        return True
 
 
 

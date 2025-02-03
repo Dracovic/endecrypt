@@ -19,13 +19,12 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
                 >> 0123456789abcdefghij
         """
         if "algo" in kwargs: # user defined algorithm
-            if(self._validate_algo(kwargs["algo"])):
-                self.algo = getattr(self, kwargs["algo"])
+            self._validate_algo(kwargs["algo"])
         else:
             self.algo = getattr(self, "rot13")
         super().__init__(**kwargs)
         self.enc_msg = self.org_msg
-        self.dec_msg = self.algo()
+        self.dec_msg = self.run_decryption(**kwargs)
 
     def info(self, alf: bool = False):
         """Prints the attributes of the Encoder object."""
@@ -37,6 +36,13 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
             print(f'Alphabet: {self.alphabet}')
         super().info()
 
+    def run_decryption(self, **kwargs):
+        if kwargs["algo"] == "scytale":
+            return self.scytale(kwargs["radius"])	
+        elif 'key' in kwargs:
+            return self.algo(kwargs["key"])
+        else:
+            return self.algo()
       
     def scytale(self, r: int = 4) -> str:
         """ Scytale is a simple transposition cipher used in ancient Greece. I imagine it as a regular prism
