@@ -1,4 +1,8 @@
-def parse_cmd_args() -> dict or bool:
+import argparse
+from pathlib import Path
+import my_cryptography as mc
+
+def parse_cmd_args() -> dict:
     """This function parses the inputs for when the tool is used directly from the command line. It first checks if any
         were provided at all becuse it can also be called from hard coding in main().
 
@@ -24,112 +28,23 @@ def parse_cmd_args() -> dict or bool:
                         Prints out by default but can be a '.txt' file name   
                         or file path"""
 
-    if len(sys.argv) > 1:
-        parser = argparse.ArgumentParser(description="Encrypt and decrypt messages and files", epilog="")
-        en_or_de = parser.add_mutually_exclusive_group(required=True)
-        en_or_de.add_argument("-e", "-en", "--encrypt", action="store_true", help="Encryption of the message or file will take place", default=False)
-        en_or_de.add_argument("-d", "-de", "--decrypt", action="store_true", help="Decryption of the message or file will take place", default=False)
-    
-        parser.add_argument("-a", "--algo", "--algorithm", help= "Selected encryption/decryption algorithm", default="scytale")
-        parser.add_argument("-r", "--radius", type=int, help= "Size of the radius for the Scytale Cypher", default=5)
-    
-        parser.add_argument("-i", "--input", help= "The input to be encrypted/dectypted. Can be string, '.txt' file name or file path", default='Endecrypt - encryption and decryption tool')
-        parser.add_argument("-o", "--output", help= "Prints out by default but can be a '.txt' file name or file path", default=None)
-        parser.add_argument("-m", "--message", help= "Selected encryption/decryption algorithm", default="Endecrypt - encryption and decryption tool")
-    
-        args = parser.parse_args()
-        args_dict = vars(args)
-        validate_cmd_input_file_name(args_dict["input"])
-        validate_cmd_output_file_name(args_dict["output"])
-        validate_cmd_algo(args_dict["encrypt"], args_dict["algo"])
-        return args_dict
+    parser = argparse.ArgumentParser(description="Encrypt and decrypt messages and files", epilog="")
+    en_or_de = parser.add_mutually_exclusive_group(required=True)
+    en_or_de.add_argument("-e", "-en", "--encrypt", action="store_true", help="Encryption of the message or file will take place", default=False)
+    en_or_de.add_argument("-d", "-de", "--decrypt", action="store_true", help="Decryption of the message or file will take place", default=False)
 
-    else:
-        return False
+    parser.add_argument("-a", "--algo", "--algorithm", help= "Selected encryption/decryption algorithm")
+    parser.add_argument("-r", "--radius", type=int, help= "Size of the radius for the Scytale Cypher")
+
+    parser.add_argument("-m", "--message", help= "The message to be (en/de)crypted", default="Endecrypt - encryption and decryption tool")
+    parser.add_argument("-i", "--input", help= "The input to be (en/de)ctypted. Can be string, '.txt' file name or file path", default='Endecrypt - encryption and decryption tool')
+    parser.add_argument("-o", "--output", help= "Prints out by default but can be a '.txt' file name or file path", default=None)
     
-def validate_input_filename(input_arg: str) -> bool:
-    """This function validates the name of the input file set in the command line using the -o flag
-    
-        Arguments:
-            input_arg: str - name of the file, comes from parser
-        
-        Returns:
-            True: bool - validataion either passes and returns True or fails and raises an Error.
-    """
-    try:
-        if input_arg[:-4] != '.txt':
-            raise argparse.ArgumentError(f'{input_arg} does not have a valid file termination')
-    finally:
-        return True
+    args = parser.parse_args()
+    args_dict = vars(args)
 
-def validate_output_filename(output_arg: str) -> bool:
-    """This function validates the name of the output file set in the command line using the -o flag
-    
-        Arguments:
-            output_arg: str - name of the file, comes from parser
-        
-        Returns:
-            True: bool - validataion either passes and returns True or fails and raises an Error.
-    """
-    try:
-        if output_arg[:-4] != '.txt':
-            raise argparse.ArgumentError(f'{output_arg} does not have a valid file termination')
-    finally:
-        return True
-
-def validate_algo(en_or_de: bool, algo_arg: str) -> bool:
-    """This function checks the Encoder class and makes sure that the algorithm is programmed into the Encoder or Decoder classes
-
-        Arguments:
-            en_or_de: bool - True if it's encryption, False if it's decryption
-            algo_arg: str - name of the Algorithm to validate the existence of
-
-        Returns:
-            True: bool  - validation either passes and returns True or fails and raises an Error.
-    """
-    try:
-        if en_or_de:
-            if hasattr(mc.Encoder(), algo_arg):
-                if not callable(algo_arg):
-                    raise argparse.ArgumentError(f'{algo_arg} is not an existingly supported algorithm.')
-        else:
-             if hasattr(mc.Decoder(), algo_arg):
-                if not callable(algo_arg):
-                    raise argparse.ArgumentError(f'{algo_arg} is not an existingly supported algorithm.')
-    finally:
-        return True
-
+    return args_dict
 #def manage_case_args(algo: str, args: dict) -> dict: a dictionary that hold the correct dict for kwargs to use in the Encoder and Decoder classes
-
-def cmd_line_main() -> bool:
-    try:
-        args = parse_cmd_args()
-        if args == False:
-            return args
-    except Exception as e:
-        print(f'An unexpected error occured: {e}')
-
-    #for key, value in args.items():
-        #print(f'{key} = {value}')
-
-    if args["encrypt"]:               # -e flag, instantiate an Encoder with the appropriate algo and characteristics
-        if args["algo"] == "scytale":
-            encoder = mc.Encoder(algo=args["algo"], message=args["input"], radius=args["radius"])
-        else:
-            encoder = mc.Encoder(algo=args["algo"], message=args["input"])
-
-        print(f'Original message: {encoder.org_msg}')
-        print(f'Encoded message: {encoder.enc_msg}')
-
-    elif args["decrypt"]:             # -d flag, instantiate a Decoder with the appropriate algo and characteristics
-        if args["algo"] == "scytale":
-            decoder = mc.Decoder(algo=args["algo"], message=args["input"], radius=args["radius"])
-        else:
-            decoder = mc.Decoder(algo=args["algo"], message=args["input"])
-        
-        print(f'Original message: {decoder.enc_msg}')
-        print(f'Decoded message: {decoder.dec_msg}')
-    return True
 
     #for i in range(1,20): # default scytale default behaviour devtest, proper testing in tests/
         #en.enc_msg = en.algo(r=i)                # more of a visualization really..
@@ -222,8 +137,22 @@ def cmd_line_main() -> bool:
         #print(f'Encoded Message r=9:  {de9.enc_msg}')
         #print(f'Decoded Message r=9:  {de9.dec_msg}')
 
+def main():
+    try:
+        args = parse_cmd_args() # dict if there are args, False if there are none
+    except Exception as e:
+        print(f'An unexpected error occured: {e}')
+
+    print("No command line arguments were provided. Running the program with default values.")
+    print(f'Encoder initiated...')
+    en = mc.Encoder(algo="atbash", message="abcdefghijklmnopqrst")
+    en.info()
+    if "decrypt" in args:
+        print(f'Decoder initiated...')
+        de = mc.Decoder (algo="atbash", message=en.enc_msg)
+        de.info()
+
 if __name__ == "__main__":
     # used for cmdline interaction with program
-    if not cmd_line_main(): #True if there are args and the program has run through cmdline, False if there are no args and main() shall run
         # used for hard coded examples and debugging
         main()

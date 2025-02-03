@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Default no args",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+        },
+        {
+            "name": "Python Debugger: command-line default no args",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["-e"],
+        },
+        {
+            "name": "Python Debugger: command-line args",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["-e", "-a", "scytale"],
+        }
+    ]
+}

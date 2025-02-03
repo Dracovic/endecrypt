@@ -1,54 +1,111 @@
+from pathlib import Path
 import string
 
 class Coder:
-    """ A Coder class to abstract manage and not repeat attributes both the Encoder and Decoder classes
-        will have in common. Also will manage files and command-line inputs.
+    """An Coder tool to (en/de)crypt messages using various algorithms.
+
+        An Coder is an Object that is created with a specified alphabet, algorithm,
+        message, input file, and output file as parameters.
+
+        This Coder class abstracts and manages attributes for both the Encoder and Decoder classes
+        that they will have in common. Also will manage files and command-line inputs.
+
+            Attributes:
+                alphabet: dict - the alphabet to be used for (en/de)crypted.
+                    Defaults to all ascii letters and digits using the -al --alphabet argument.
+                org_msg: str - the original message to be (en/de)crypted.
+                algo: str - the algorithm used to (en/de)crypted the message.
+                (optional)
+                input_file: str - the file to be (en/de)crypted.
+                output_file: str - the (en/de)crypted file to be written or written to.
     """
 
     def __init__(self, **kwargs):
-        self.std_alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(62))])
-        if kwargs:
-            if kwargs["message"]:
-                self.msg = kwargs["message"]
-            elif kwargs["input"][:-4] == ".txt":
-                self.input = kwargs["input"]
-            if hasattr(self, kwargs["algo"]):
-                self.algo = getattr(self, kwargs["algo"])
-                if callable(self.algo):
-                    if kwargs["algo"] == "scytale":
-                        self.enc_msg = self.algo(kwargs["radius"])
-                    else:
-                        self.enc_msg = self.algo()
-        else: #No arguments passed programatically
-            self.msg = "abcdefghijklmnopqrst"
-            self.algo = "scytale"
-    """ A Coder class to abstract manage and not repeat attributes both the Encoder and Decoder classes
-        will have in common. Also will manage files and command-line inputs.
-    """
 
-    def __init__(self, **kwargs):
-        self.std_alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(62))])
-    """ A Coder class to abstract manage and not repeat attributes both the Encoder and Decoder classes
-        will have in common. Also will manage files and command-line inputs.
-    """
+        if kwargs: # everything that is to be done if there are args passed by command-line
+            if "alphabet" in kwargs: # user may define their own alphabet
+                self.alphabet = self.generate_alphabet(kwargs["alphabet"])
+            else:
+                self.alphabet = self.generate_alphabet()
 
-    def __init__(self, **kwargs):
-        self.std_alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(62))])
-        if kwargs:
-            if kwargs["message"]:
-                self.msg = kwargs["message"]
-            elif kwargs["input"][:-4] == ".txt":
-                self.input = kwargs["input"]
-            if hasattr(self, kwargs["algo"]):
-                self.algo = getattr(self, kwargs["algo"])
-                if callable(self.algo):
-                    if kwargs["algo"] == "scytale":
-                        self.enc_msg = self.algo(kwargs["radius"])
-                    else:
-                        self.enc_msg = self.algo()
-        else: #No arguments passed programatically
-            self.msg = "abcdefghijklmnopqrst"
-            self.algo = "scytale"
+            if "message" in kwargs: # user defined message
+                self.org_msg = kwargs["message"]
+            elif "input" in kwargs: # user defined file for input
+                self.input_file = kwargs["input"]
+            else:
+                self.org_msg = "abcdefghijklmnopqrst"
 
-co = Coder()
-print(co.std_alphabet)
+        else: #No arguments passed programatically, adds default values
+            self.org_msg = "abcdefghijklmnopqrst"
+            self.alphabet = self.generate_alphabet()
+
+    def info(self):
+        """Prints the attributes of the Coder object."""
+        print(f"Alphabet: {self.alphabet}")
+
+    def generate_alphabet(self, additions: str = "") -> dict:
+        self.alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(62))])
+        user_defined = [*zip([c for c in additions if c not in self.alphabet], range(62, 62+len(additions)))]
+        for k, v in user_defined:
+            self.alphabet[k] = v
+        self.alphabet[" "] = len(self.alphabet)+1
+        return self.alphabet
+
+    
+    def validate_input_file(input_arg: str) -> bool:
+        """This function validates the name of the input file set in the command line using the -o flag
+        
+            Arguments:
+                input_arg: str - name of the file, comes from parser
+            
+            Returns:
+                True: bool - validataion either passes and returns True or fails and raises an Error.
+        """
+        try:
+            if input_arg[:-4] != '.txt':
+                raise argparse.ArgumentError(f'{input_arg} does not have a valid file termination')
+        finally:
+            return True
+    
+    def validate_output_file(output_arg: str) -> bool:
+        """This function validates the name of the output file set in the command line using the -o flag
+        
+            Arguments:
+                output_arg: str - name of the file, comes from parser
+            
+            Returns:
+                True: bool - validataion either passes and returns True or fails and raises an Error.
+        """
+        try:
+            if output_arg[:-4] != '.txt':
+                raise argparse.ArgumentError(f'{output_arg} does not have a valid file termination')
+        finally:
+            return True
+    
+    def _validate_algo(en_or_de: bool, algo: str) -> bool: # should only be called by child classes
+        """This function checks the Coder class and makes sure that the algorithm is programmed into the Encoder or Decoder classes
+    
+            Arguments:
+                en_or_de: bool - True if it's encryption, False if it's decryption
+                algo_arg: str - name of the Algorithm to validate the existence of
+    
+            Returns:
+                True: bool  - validation either passes and returns True or fails and raises an Error.
+        """
+        try:
+            if en_or_de:
+                if hasattr(self.algo):
+                    if not callable(algo):
+                        raise argparse.ArgumentError(f'{self.algo_arg} is not an existingly supported algorithm.')
+            else:
+                if hasattr(self, algo):
+                    if not callable(algo):
+                        raise argparse.ArgumentError(f'{self.algo} is not an existingly supported algorithm.')
+        finally:
+            return True
+
+
+
+#co = Coder()
+#co = Coder(alphabet="abcd!@#$%^&*()_+=-")
+#print(co.alphabet)

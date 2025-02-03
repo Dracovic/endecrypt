@@ -18,7 +18,24 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
                 print(scy_dec.dec_msg)
                 >> 0123456789abcdefghij
         """
-       
+        if "algo" in kwargs: # user defined algorithm
+            if(self._validate_algo(kwargs["algo"])):
+                self.algo = getattr(self, kwargs["algo"])
+        else:
+            self.algo = getattr(self, "scytale")
+        super().__init__(**kwargs)
+        self.enc_msg = self.org_msg
+        self.dec_msg = self.algo()
+
+    def info(self):
+        """Prints the attributes of the Encoder object."""
+        print(f'Type: {self.__class__.__name__}')
+        print(f'Algorithm: {self.algo.__name__}')
+        print(f'Encrypted message: {self.enc_msg}')
+        print(f'Decrypted message: {self.dec_msg}')
+        super().info()
+
+      
     def scytale(self, r: int = 4) -> str:
         """ Scytale is a simple transposition cipher used in ancient Greece. I imagine it as a regular prism
             of a certain number of faces. The number of faces is the key to the cipher. The message is written

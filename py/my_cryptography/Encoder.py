@@ -7,11 +7,21 @@ import time
 from .coder import Coder
 
 class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet definition
-    """An Encoder is an Object that is created with a specified algorithm as a parameter
-       as well as an optional message to encode on creation."""
+    """An Encoder tool to encrypt messages using various algorithms.
+
+        An Encoder is an Object that is created with a specified alphabet, algorithm,
+        message, input file, and output file as parameters.
+
+            Attributes:
+                alphabet: dict - the alphabet to be used for encryption.
+                    Defaults to all ascii letters and digits using the -al --alphabet argument.
+                org_msg: str - the original message to be encrypted.
+                algo: str - the algorithm used to encrypt the message.
+                enc_msg: str - the encrypted message.
+    """
 
     def __init__(self, **kwargs):
-        """ The Encoder class is initialized with a message and an algorithm to encode the message.
+        """ The Encoder class is initialized with a message and an algorithm to encrypt the message.
 
             Attributes:
                 org_msg: str - the original message to be encoded.
@@ -23,8 +33,22 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
                 print(scy_enc.enc_msg)
                 >> 05af16bg27ch38di49ej
         """
-        self.algo = getattr(self, self.algo)
+        if "algo" in kwargs: # user defined algorithm
+            if(self._validate_algo(kwargs["algo"])):
+                self.algo = getattr(self, kwargs["algo"])
+        else:
+            self.algo = getattr(self, "scytale")
+        super().__init__(**kwargs)
         self.enc_msg = self.algo()
+
+    def info(self):
+        """Prints the attributes of the Encoder object."""
+        print(f'Type: {self.__class__.__name__}')
+        print(f'Algorithm: {self.algo.__name__}')
+        print(f'Original message: {self.org_msg}')
+        print(f'Encoded message: {self.enc_msg}')
+        super().info()
+
 
     def scytale(self, r: int = 4) -> str:
         """ Scytale is a simple transposition cipher used in ancient Greece. I imagine it as a regular prism
@@ -206,6 +230,3 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
    
     def affine(self) -> str:
         ...
-
-en = Encoder(message="abcdefghijlkmnopqrst", algo="rot13")
-print(en.enc_msg)
