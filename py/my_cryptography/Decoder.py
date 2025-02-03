@@ -1,3 +1,4 @@
+from .coder import Coder
 import string
 
 class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet definition

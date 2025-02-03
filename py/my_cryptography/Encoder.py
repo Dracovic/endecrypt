@@ -4,7 +4,7 @@ import cProfile
 import pstats
 from io import StringIO
 import time
-from coder import Coder
+from .coder import Coder
 
 class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet definition
     """An Encoder is an Object that is created with a specified algorithm as a parameter
