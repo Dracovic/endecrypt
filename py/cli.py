@@ -145,9 +145,9 @@ def main():
 
     print("No command line arguments were provided. Running the program with default values.")
     print(f'Encoder initiated...')
-    en = mc.Encoder(algo="atbash", message="abcdefghijklmnopqrst")
+    en = mc.Encoder(algo="atbash", message=args["message"])
     en.info()
-    if "decrypt" in args:
+    if args["decrypt"] == True:
         print(f'Decoder initiated...')
         de = mc.Decoder (algo="atbash", message=en.enc_msg)
         de.info()

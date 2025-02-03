@@ -5,20 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Default no args",
+            "name": "Python Debugger: main.py",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
         },
         {
-            "name": "Python Debugger: command-line default no args",
+            "name": "Python Debugger: main.py -e",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "args": ["-e"],
         },
         {
-            "name": "Python Debugger: command-line args",
+            "name": "Python Debugger: main.py -e -a scytale",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",

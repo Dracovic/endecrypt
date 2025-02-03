@@ -41,14 +41,17 @@ class Coder:
 
     def info(self):
         """Prints the attributes of the Coder object."""
-        print(f"Alphabet: {self.alphabet}")
+        #print(f"Alphabet: {self.alphabet}") DEPRECATED
+        #TODO: print(f'Input File:{self.input}')
+        #TODO: print(f'Output File: {self.output}')
 
     def generate_alphabet(self, additions: str = "") -> dict:
-        self.alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(62))])
-        user_defined = [*zip([c for c in additions if c not in self.alphabet], range(62, 62+len(additions)))]
+        self.alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(1,62))])
+        user_defined = [*zip([c for c in additions if c not in self.alphabet], range(63, 63+len(additions)))]
         for k, v in user_defined:
             self.alphabet[k] = v
         self.alphabet[" "] = len(self.alphabet)+1
+        self.alphabet["-"] = len(self.alphabet)+1
         return self.alphabet
 
     

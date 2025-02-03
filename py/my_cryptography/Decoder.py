@@ -22,17 +22,19 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
             if(self._validate_algo(kwargs["algo"])):
                 self.algo = getattr(self, kwargs["algo"])
         else:
-            self.algo = getattr(self, "scytale")
+            self.algo = getattr(self, "rot13")
         super().__init__(**kwargs)
         self.enc_msg = self.org_msg
         self.dec_msg = self.algo()
 
-    def info(self):
+    def info(self, alf: bool = False):
         """Prints the attributes of the Encoder object."""
         print(f'Type: {self.__class__.__name__}')
         print(f'Algorithm: {self.algo.__name__}')
         print(f'Encrypted message: {self.enc_msg}')
         print(f'Decrypted message: {self.dec_msg}')
+        if alf: # alphaber_flag
+            print(f'Alphabet: {self.alphabet}')
         super().info()
 
       
@@ -65,17 +67,8 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
         return ''.join(result)
 
     def atbash(self) -> str: # Only works with alphanumeric strings
-        #lower = [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))]  # all lowercase letters with matching opposite
-        #upper = [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))]  # all uppercase letters with matching opposite
-        #nums = [*zip(string.digits, reversed(string.digits	))]                    # all digits with matching opposite
-
-        alphabet = dict(
-            [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))] + 
-            [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))] +
-            [*zip(string.digits, reversed(string.digits	))]
-            )
-
-        result = ''.join([alphabet[self.enc_msg[self.enc_msg.index(c)]] for c in self.enc_msg])
+        atbash_phabet = {k:v for k, v in zip(self.alphabet.keys(), reversed(self.alphabet.keys()))}
+        result = ''.join([atbash_phabet[c] for c in self.enc_msg])
         return result
 
     def polybius_square(self) -> str: # Only works with lower case alphabet

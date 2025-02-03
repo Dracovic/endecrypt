@@ -37,16 +37,18 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
             if(self._validate_algo(kwargs["algo"])):
                 self.algo = getattr(self, kwargs["algo"])
         else:
-            self.algo = getattr(self, "scytale")
+            self.algo = getattr(self, "rot13")
         super().__init__(**kwargs)
         self.enc_msg = self.algo()
 
-    def info(self):
+    def info(self, alf: bool = False):
         """Prints the attributes of the Encoder object."""
         print(f'Type: {self.__class__.__name__}')
         print(f'Algorithm: {self.algo.__name__}')
         print(f'Original message: {self.org_msg}')
-        print(f'Encoded message: {self.enc_msg}')
+        print(f'Encrypted message: {self.enc_msg}')
+        if alf: # alphaber_flag
+            print(f'Alphabet: {self.alphabet}')
         super().info()
 
 
@@ -79,13 +81,10 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
         return ''.join(result)
 
     def atbash(self) -> str: # Only works with alphanumeric strings
-        lower = [*zip(string.ascii_lowercase, reversed(string.ascii_lowercase))] # pair list of the lower case alphabet with it's pair in reverse order
-        upper = [*zip(string.ascii_uppercase, reversed(string.ascii_uppercase))] # pair list of the upper case alphabet with it's pair in reverse order
-        nums = [*zip(string.digits, reversed(string.digits))] # pair list of the digits with it's pair in reverse order
-
-        alphabet = dict(lower + upper + nums) # hashmap of all letters and digits with corresponding opposites for quick lookup
-
-        result = ''.join([alphabet[self.org_msg[self.org_msg.index(c)]] for c in self.org_msg])
+        atbash_phabet = {k: v for k, v in zip(self.alphabet.keys(), reversed(self.alphabet.keys()))}
+        #print(alphabet)
+        result = ''.join([atbash_phabet[c] for c in self.org_msg])
+        #print(result)
         return result
         
     def polybius_square(self) -> str: # Only returns lowercase alphabet letters
