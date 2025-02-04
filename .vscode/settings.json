@@ -3,6 +3,6 @@
     "python.testing.unittestEnabled": false,
     "editor.unfoldOnClickAfterEndOfLine": false,
     "python.testing.pytestArgs": [
-        "py/tests"
+        "endepy/tests"
     ]
 }
