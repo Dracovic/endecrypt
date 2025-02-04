@@ -66,7 +66,7 @@ class Coder:
         """
         try:
             if input_arg[:-4] != '.txt':
-                raise argparse.ArgumentError(f'{input_arg} does not have a valid file termination')
+                raise ArgumentError(f'{input_arg} does not have a valid file termination')
         finally:
             return True
     
@@ -81,7 +81,7 @@ class Coder:
         """
         try:
             if output_arg[:-4] != '.txt':
-                raise argparse.ArgumentError(f'{output_arg} does not have a valid file termination')
+                raise ArgumentError(f'{output_arg} does not have a valid file termination')
         finally:
             return True
     
