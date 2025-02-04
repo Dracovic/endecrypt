@@ -1,5 +1,5 @@
 import pytest
-from ....py import my_cryptography as mc
+import my_cryptography as mc
 
 
 @pytest.mark.benchmark(group="performance")
