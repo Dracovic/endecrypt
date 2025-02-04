@@ -1,3 +1,4 @@
+from argparse import ArgumentError
 from pathlib import Path
 import string
 
@@ -54,8 +55,7 @@ class Coder:
         self.alphabet["-"] = len(self.alphabet)+1
         return self.alphabet
 
-    
-    def validate_input_file(input_arg: str) -> bool:
+    def validate_input_file(self, input_arg: str) -> bool:
         """This function validates the name of the input file set in the command line using the -o flag
         
             Arguments:
@@ -70,7 +70,7 @@ class Coder:
         finally:
             return True
     
-    def validate_output_file(output_arg: str) -> bool:
+    def validate_output_file(self, output_arg: str) -> bool:
         """This function validates the name of the output file set in the command line using the -o flag
         
             Arguments:
@@ -85,7 +85,7 @@ class Coder:
         finally:
             return True
     
-    def _validate_algo(algo: str) -> bool: # should only be called by child classes
+    def _validate_algo(self, algo: str) -> bool: # should only be called by child classes
         """This function checks the Coder class and makes sure that the algorithm is programmed into the Encoder or Decoder classes
     
             Arguments:
@@ -95,16 +95,16 @@ class Coder:
             Returns:
                 True: bool  - validation either passes and returns True or fails and raises an Error.
         """
-        try:
-            if hasattr(self.algo): # self always refers to the object instantiated, here the Child calling it
-                if not callable(self.algo):
-                    raise argparse.ArgumentError(f'{self.algo} is not an existing supported algorithm.')
-                    return False
-        except Exception as e:
-            print(f'Error: {e}')
-            return False
-        return True
-
+        if hasattr(self, algo): # self always refers to the object instantiated, here the Child calling it
+            self.algo = getattr(self, algo)
+            if callable(self.algo):
+                return True
+            else:
+                raise ArgumentError(f'{algo} is not an existing supported algorithm.')
+                return False
+        else:
+                raise ArgumentError(f'{algo} is not an existing supported algorithm.')
+                return False
 
 
 #co = Coder()

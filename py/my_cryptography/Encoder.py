@@ -34,6 +34,7 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
                 >> 05af16bg27ch38di49ej
         """
         if "algo" in kwargs: # user defined algorithm
+            algo = kwargs["algo"]
             super()._validate_algo(kwargs["algo"])
         else:
             self.algo = getattr(self, "rot13")
