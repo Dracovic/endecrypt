@@ -2,6 +2,7 @@ import unittest
 import pytest
 import time
 
+
 class test_Encoder(unittest.TestCase):
     def setUp(self):
         print("Setting up Encoder test...")
