@@ -1,6 +1,5 @@
 {
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
-    "editor.unfoldOnClickAfterEndOfLine": false,
-    "python.testing.pytestArgs": ["tests"]
+    "editor.unfoldOnClickAfterEndOfLine": false
 }
