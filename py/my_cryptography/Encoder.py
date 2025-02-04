@@ -1,10 +1,10 @@
+from .coder import Coder
 import string
 import numpy as np
 import cProfile
 import pstats
 from io import StringIO
 import time
-from .coder import Coder
 
 class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet definition
     """An Encoder tool to encrypt messages using various algorithms.

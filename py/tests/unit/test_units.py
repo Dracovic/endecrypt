@@ -1,6 +1,4 @@
 import pytest
-import my_cryptography as mc
-
 
 @pytest.mark.benchmark(group="performance")
 def test_caesar_encode(benchmark):

@@ -1,5 +1,4 @@
 import sys
-import argparse
 import my_cryptography as mc
 import cli
 
