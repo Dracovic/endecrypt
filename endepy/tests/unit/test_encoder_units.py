@@ -10,6 +10,6 @@ def test_encoder_default_instantiation():
 
 @pytest.mark.unit
 def test_caesar_encode(benchmark):
-    en = mc.Encoder(algo="caesar_cipher", message="abcdefghijklmnopqrst", key=4)
+    en = Encoder(algo="caesar_cipher", message="abcdefghijklmnopqrst", key=4)
     result = benchmark(en.caesar_cipher)
     assert result == 'efghijklmnopqrstuvwx'
