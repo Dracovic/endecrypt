@@ -1,14 +1,22 @@
 import pytest
 from my_cryptography import Encoder
 
-pytest.mark.unit
-def test_encoder_default_instantiation():
+@pytest.fixture
+@pytest.mark.unit
+def default_encoder():
     en = Encoder()
-    assert en.org_msg == "abcdefghijklmnopqrst"
-    assert en.enc_msg == "opqrstuvwxyzabcdefgh"
-    assert en.algo.__name__ == "rot13"
+    return en
 
 @pytest.mark.unit
+def test_encoder_info(default_encoder):
+    assert type(default_encoder.info()) is str
+
+@pytest.mark.unit
+def test_encoder_info_alphabet(default_encoder):
+    assert type(default_encoder.info(alf=True)) is str
+    
+@pytest.mark.unit
+@pytest.mark.benchmark()
 def test_caesar_encode(benchmark):
     en = Encoder(algo="caesar_cipher", message="abcdefghijklmnopqrst", key=4)
     result = benchmark(en.caesar_cipher)

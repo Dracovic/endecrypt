@@ -45,6 +45,12 @@ class Coder:
         #print(f"Alphabet: {self.alphabet}") DEPRECATED
         #TODO: print(f'Input File:{self.input}')
         #TODO: print(f'Output File: {self.output}')
+        #info = f"""
+        #Alphabet: {self.alphabet} DEPRECATED
+        #Input File:{self.input})\n
+        #Output File: {self.output})\n
+        # """
+        #TODO: return info
 
     def generate_alphabet(self, additions: str = "") -> dict:
         self.alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(1,62))])

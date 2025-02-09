@@ -43,13 +43,23 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
 
     def info(self, alf: bool = False):
         """Prints the attributes of the Encoder object."""
-        print(f'Type: {self.__class__.__name__}')
-        print(f'Algorithm: {self.algo.__name__}')
-        print(f'Original message: {self.org_msg}')
-        print(f'Encrypted message: {self.enc_msg}')
-        if alf: # alphaber_flag
-            print(f'Alphabet: {self.alphabet}')
-        super().info()
+        #print(f'Type: {self.__class__.__name__}')
+        #print(f'Algorithm: {self.algo.__name__}')
+        #print(f'Original message: {self.org_msg}')
+        #print(f'Encrypted message: {self.enc_msg}')
+        #if alf: # alphabet_flag
+            #print(f'Alphabet: {self.alphabet}')
+        #super().info()
+        info = f"""
+        Type: {self.__class__.__name__}
+        Algorithm: {self.algo.__name__}
+        Original message: {self.org_msg	}
+        Encrypted message: {self.enc_msg}
+        """
+        if alf:
+            info = info + f'Alphabet: {self.alphabet}\n'
+        #info = info + super().info()
+        return info
 
     def run_encryption(self, **kwargs) -> str:
         """Runs the algorithm specified in the Encoder object.
