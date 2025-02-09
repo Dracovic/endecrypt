@@ -33,12 +33,12 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
                 print(scy_enc.enc_msg)
                 >> 05af16bg27ch38di49ej
         """
+        super().__init__(**kwargs)
         if "algo" in kwargs: # user defined algorithm
             algo = kwargs["algo"]
             super()._validate_algo(kwargs["algo"])
         else:
             self.algo = getattr(self, "rot13")
-        super().__init__(**kwargs)
         self.enc_msg = self.run_encryption(**kwargs)
 
     def info(self, alf: bool = False):
@@ -54,13 +54,14 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
     def run_encryption(self, **kwargs) -> str:
         """Runs the algorithm specified in the Encoder object.
         """
-        if kwargs["algo"] == "scytale":
-            if 'radius' in kwargs:
-                return self.scytale(kwargs["radius"])
-            else:
-                raise ValueError("Scytale requires a radius to be specified")
-        elif 'key' in kwargs:
-            return self.algo(kwargs["key"])
+        if "algo" in kwargs:
+            if kwargs["algo"] == "scytale":
+                if 'radius' in kwargs:
+                    return self.scytale(kwargs["radius"])
+                else:
+                    raise ValueError("Scytale requires a radius to be specified")
+            elif 'key' in kwargs:
+                return self.algo(kwargs["key"])
         else:
             return self.algo()
 

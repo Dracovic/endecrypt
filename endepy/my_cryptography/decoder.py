@@ -18,13 +18,15 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
                 print(scy_dec.dec_msg)
                 >> 0123456789abcdefghij
         """
-        if "algo" in kwargs: # user defined algorithm
-            self._validate_algo(kwargs["algo"])
-        else:
-            self.algo = getattr(self, "rot13")
         super().__init__(**kwargs)
         self.enc_msg = self.org_msg
-        self.dec_msg = self.run_decryption(**kwargs)
+        if "algo" in kwargs: # user defined algorithm
+            self._validate_algo(kwargs["algo"])
+            self.dec_msg = self.run_decryption(**kwargs)
+        else:
+            self.enc_msg = "opqrstuvwxyzabcdefgh"
+            self.algo = getattr(self, "rot13")
+            self.dec_msg = self.run_decryption()
 
     def info(self, alf: bool = False):
         """Prints the attributes of the Encoder object."""
@@ -37,10 +39,11 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
         super().info()
 
     def run_decryption(self, **kwargs):
-        if kwargs["algo"] == "scytale":
-            return self.scytale(kwargs["radius"])	
-        elif 'key' in kwargs:
-            return self.algo(kwargs["key"])
+        if "algo" in kwargs:
+            if kwargs["algo"] == "scytale":
+                return self.scytale(kwargs["radius"])	
+            elif 'key' in kwargs:
+                return self.algo(kwargs["key"])
         else:
             return self.algo()
       

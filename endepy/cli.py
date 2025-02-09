@@ -151,6 +151,7 @@ def main():
         print(f'Decoder initiated...')
         de = mc.Decoder (algo="atbash", message=en.enc_msg)
         de.info()
+    return None
 
 if __name__ == "__main__":
     # used for cmdline interaction with program

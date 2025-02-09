@@ -2,3 +2,6 @@
 pythonpath= [
     "."
 ]
+markers = [
+    "unit: Marks unit tests"
+]
