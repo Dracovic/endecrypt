@@ -143,14 +143,23 @@ def main():
     except Exception as e:
         print(f'An unexpected error occured: {e}')
 
-    print("No command line arguments were provided. Running the program with default values.")
-    print(f'Encoder initiated...')
-    en = mc.Encoder(algo="atbash", message=args["message"])
-    en.info()
-    if args["decrypt"] == True:
-        print(f'Decoder initiated...')
-        de = mc.Decoder (algo="atbash", message=en.enc_msg)
-        de.info()
+    if args == {}: # empty command line args (only -e or -d, which are mandatory)
+        print("No command line arguments were provided. Running the program with default values.")
+
+        print(f'Encoder initiated...')
+        en = mc.Encoder(algo="atbash", message=args["message"])
+        en.info()
+        if args["decrypt"] == True:
+            print(f'Decoder initiated...')
+            de = mc.Decoder (algo="atbash", message=en.enc_msg)
+            de.info()
+    else: # non empty commandline args
+        if args["encrypt"] == True:
+            en = mc.Encoder(args)
+            en.info()
+        else:
+            de = mc.Encoder()
+            de.info()
     return None
 
 if __name__ == "__main__":

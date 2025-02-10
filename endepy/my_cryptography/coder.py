@@ -21,7 +21,7 @@ class Coder:
                 output_file: str - the (en/de)crypted file to be written or written to.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
 
         if kwargs: # everything that is to be done if there are args passed by command-line
             if "alphabet" in kwargs: # user may define their own alphabet

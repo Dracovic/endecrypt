@@ -1,10 +1,6 @@
-from .coder import Coder
+from my_cryptography.coder import Coder
 import string
 import numpy as np
-import cProfile
-import pstats
-from io import StringIO
-import time
 
 class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet definition
     """An Encoder tool to encrypt messages using various algorithms.
@@ -20,7 +16,7 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
                 enc_msg: str - the encrypted message.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
         """ The Encoder class is initialized with a message and an algorithm to encrypt the message.
 
             Attributes:
@@ -33,13 +29,13 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
                 print(scy_enc.enc_msg)
                 >> 05af16bg27ch38di49ej
         """
-        super().__init__(**kwargs)
+        super().__init__(kwargs)
         if "algo" in kwargs: # user defined algorithm
             algo = kwargs["algo"]
-            super()._validate_algo(kwargs["algo"])
+            super()._validate_algo(algo)
         else:
             self.algo = getattr(self, "rot13")
-        self.enc_msg = self.run_encryption(**kwargs)
+        self.enc_msg = self.run_encryption(kwargs)
 
     def info(self, alf: bool = False):
         """Prints the attributes of the Encoder object."""
@@ -59,9 +55,10 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
         if alf:
             info = info + f'Alphabet: {self.alphabet}\n'
         #info = info + super().info()
+        print(info)
         return info
 
-    def run_encryption(self, **kwargs) -> str:
+    def run_encryption(self, kwargs) -> str:
         """Runs the algorithm specified in the Encoder object.
         """
         if "algo" in kwargs:
@@ -213,7 +210,13 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
 
         # Output
         return ciphertext
+
     #performance testing, cProfile, time, and pstats
+        #import cProfile
+        #import pstats
+        #from io import StringIO
+        #import time
+
         #en = Encoder()
         #print(en.caesar_cipher())
         #print(en.cytool_caesar(text='abcdefghijklmnopqrst', key=4, alphabet='abcdefghijklmnopqrstuvwxyz', b_encrypt=True, b_keep_chars=False, b_block_of_five=False))
