@@ -5,7 +5,7 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
     """A Decoder is an Object that is created with a specified algorithm as a parameter
        as well as an optional message to decode on creation."""
 
-    def __init__(self,**kwargs):
+    def __init__(self, kwargs):
         """ The Decoder class is initialized with a message and an algorithm to encode the message.
 
             Attributes:
@@ -28,7 +28,7 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
             self.algo = getattr(self, "rot13")
             self.dec_msg = self.run_decryption()
 
-    def info(self, alf: bool = False):
+    def info(self, alf: bool = False) -> str: # also prints said str
         """Prints the attributes of the Encoder object."""
         print(f'Type: {self.__class__.__name__}')
         print(f'Algorithm: {self.algo.__name__}')
@@ -118,6 +118,16 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
 
     def rot13(self) -> str:
         return self.caesar_cipher(key = 14)
+        ...
+
+    def affine(self, key):
+        inverted_alph = {v: k for k, v in self.alphabet}
+        print(inverted_alph)
+        result = ''
+        for c in self.enc_msg:
+            index = self.alphabet[c]//key
+            if index 
+            ...
         ...
 
 #de = Decoder(message="zyxwvutsrqponmlkjihg", algo="atbash")

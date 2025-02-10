@@ -21,7 +21,7 @@ class Coder:
                 output_file: str - the (en/de)crypted file to be written or written to.
     """
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         if kwargs: # everything that is to be done if there are args passed by command-line
             if "alphabet" in kwargs: # user may define their own alphabet
@@ -53,8 +53,8 @@ class Coder:
         #TODO: return info
 
     def generate_alphabet(self, additions: str = "") -> dict:
-        self.alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(1,62))])
-        user_defined = [*zip([c for c in additions if c not in self.alphabet], range(63, 63+len(additions)))]
+        self.alphabet = dict([*zip(list(string.ascii_letters + string.digits), range(1,63))])
+        user_defined = [*zip([c for c in additions if c not in self.alphabet], range(64, 64+len(additions)))]
         for k, v in user_defined:
             self.alphabet[k] = v
         self.alphabet[" "] = len(self.alphabet)+1

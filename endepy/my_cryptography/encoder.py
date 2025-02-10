@@ -16,7 +16,7 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
                 enc_msg: str - the encrypted message.
     """
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
         """ The Encoder class is initialized with a message and an algorithm to encrypt the message.
 
             Attributes:
@@ -29,7 +29,7 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
                 print(scy_enc.enc_msg)
                 >> 05af16bg27ch38di49ej
         """
-        super().__init__(kwargs)
+        super().__init__(**kwargs)
         if "algo" in kwargs: # user defined algorithm
             algo = kwargs["algo"]
             super()._validate_algo(algo)
@@ -37,7 +37,7 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
             self.algo = getattr(self, "rot13")
         self.enc_msg = self.run_encryption(kwargs)
 
-    def info(self, alf: bool = False):
+    def info(self, alf: bool = False) -> str: # also prints said str
         """Prints the attributes of the Encoder object."""
         #print(f'Type: {self.__class__.__name__}')
         #print(f'Algorithm: {self.algo.__name__}')
@@ -211,6 +211,29 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
         # Output
         return ciphertext
 
+    def rot13(self) -> str: # Only supports lowercase letters
+        return self.caesar_cipher(key = 14)
+   
+    def affine(self, key) -> str:
+        inverted_alph = {v: k for k, v in self.alphabet.items()} #switch keys for values
+        print(inverted_alph)
+        result = ""
+        for c in self.org_msg:
+            index = self.alphabet[c]*key
+            if index > (len(inverted_alph)):
+                index = index%len(inverted_alph)
+
+            result += inverted_alph[index]
+            print(result)
+
+#only for local quick debugging purposes
+def main(): #gets ImportError for relative import...
+    #en = Encoder(message = "TheQuickBrownFoxJumpsOverTheLazyDog", algo = "affine", key = 5)
+    ...
+
+if __name__ == "__main__":
+    main()
+
     #performance testing, cProfile, time, and pstats
         #import cProfile
         #import pstats
@@ -249,9 +272,3 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
         #stats = pstats.Stats(profiler, stream=s)
         #stats.strip_dirs().sort_stats("cumulative").print_stats(10)
         #print(s.getvalue())
-
-    def rot13(self) -> str: # Only supports lowercase letters
-        return self.caesar_cipher(key = 14)
-   
-    def affine(self) -> str:
-        ...
