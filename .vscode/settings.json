@@ -1,8 +1,13 @@
 {
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
+<<<<<<< HEAD
     "editor.unfoldOnClickAfterEndOfLine": false,
     "python.testing.pytestArgs": [
         "endepy",
     ],
+=======
+    "python.testing.pytestEnabled": true,
+    "cmake.ignoreCMakeListsMissing": true
+>>>>>>> 34cb642a78c049ce149631d4e278b2f4cd2ff6e3
 }
