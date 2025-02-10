@@ -126,7 +126,7 @@ class Decoder(Coder): # Decoder inherits cmdline arg mngment and alphabet defini
         result = ''
         for c in self.enc_msg:
             index = self.alphabet[c]//key
-            if index 
+            #if index 
             ...
         ...
 
