@@ -66,6 +66,7 @@ class test_Encoder(unittest.TestCase):
         print('Tearing down Encoder test...')
         del self.scytale
 
+
 @pytest.mark.benchmark(group="performance")
 def test_caesar_encode(benchmark):
     en = mc.Encoder()
