@@ -226,6 +226,9 @@ class Encoder(Coder): # Encoder inherits cmdline arg mngment and alphabet defini
             result += inverted_alph[index]
             print(result)
 
+    def rail_line(self) -> str:
+        ...
+
 #only for local quick debugging purposes
 def main(): #gets ImportError for relative import...
     #en = Encoder(message = "TheQuickBrownFoxJumpsOverTheLazyDog", algo = "affine", key = 5)
